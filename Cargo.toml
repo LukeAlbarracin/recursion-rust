@@ -1,0 +1,6 @@
+[package]
+name = "temp-project"
+version = "0.1.0"
+authors = ["lukealba <lalbarracin2000@gmail.com>"]
+
+[dependencies]

@@ -8,7 +8,7 @@ use std::fmt::Debug;
 
 macro_rules! tail_recur { //put a conditional within the macro
     //($name:ident $params:tt $body:tt) => (recur($params, $name()))
-    ($name:ident $params:tt) => ($name($params))
+    ($name:ident $params:tt) => (recur($params, $name))
     //(until $($final_name: $final_params),+($name:ident $params:tt)) => (println!("Hello There!{:?}", $params))
 }
 

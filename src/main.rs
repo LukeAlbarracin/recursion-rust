@@ -1,14 +1,15 @@
-use std::any::Any;
-use std::io::Write;
+//use std::any::Any;
+//use std::io::Write;
 use std::fmt::Debug;
 
 //macro_rules! trampoline {
 //   ($x:expr) => (println!("This is my project"))
 //}
 
-macro_rules! tail_recur {
-    //(fn $name:ident $params:tt $body:tt) => (recur($params, $name()))
-    ($name:ident $params:tt) => (println!("Hello There!{:?}", $params))
+macro_rules! tail_recur { //put a conditional within the macro
+    //($name:ident $params:tt $body:tt) => (recur($params, $name()))
+    ($name:ident $params:tt) => ($name($params))
+    //(until $($final_name: $final_params),+($name:ident $params:tt)) => (println!("Hello There!{:?}", $params))
 }
 
 // need to change unsized function (dynamically sized function) like &[T] -- use destructuring???
@@ -41,7 +42,7 @@ fn add_together (_num1 : u32, _num2 : u32) -> u32 {
 
 fn main() {
    //trampoline!(0+0);
-   tail_recur!(add_two(0));
-   tail_recur!(add_together(1,3));
+   println!("{:?}", tail_recur!(add_two(0)));
+   //tail_recur!(add_together(1,3));
    //println!("{}", recur (0, add_two));
 }

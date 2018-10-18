@@ -7,7 +7,8 @@ use std::fmt::Debug;
 //}
 
 macro_rules! tail_recur {
-    (fn $name:ident $params:tt $body:tt) => (recur($params, $name()))
+    //(fn $name:ident $params:tt $body:tt) => (recur($params, $name()))
+    ($name:ident $params:tt) => (println!("Hello There!{:?}", $params))
 }
 
 // need to change unsized function (dynamically sized function) like &[T] -- use destructuring???
@@ -34,8 +35,13 @@ fn add_two (_num : u32) -> u32 {
     _num + 2
 }
 
+fn add_together (_num1 : u32, _num2 : u32) -> u32 {
+    _num1 + _num2
+}
+
 fn main() {
    //trampoline!(0+0);
-   //tail_recur!(add_two(0));
+   tail_recur!(add_two(0));
+   tail_recur!(add_together(1,3));
    //println!("{}", recur (0, add_two));
 }

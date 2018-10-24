@@ -1,24 +1,18 @@
-//use std::any::Any;
-//use std::io::Write;
 use std::fmt::Debug;
 
-//macro_rules! trampoline {
-//   ($x:expr) => (println!("This is my project"))
-//}
-
 macro_rules! tail_recur { //put a conditional within the macro
-    //($name:ident $params:tt $body:tt) => (recur($params, $name()))
-<<<<<<< HEAD
-    ($name:ident $params:tt) => (recur($params, $name));
-=======
-    ($name:ident $params:tt) => ($name($params))
->>>>>>> parent of 8b3db89... Allowed recursion for 1 parameter function...
-    //(until $($final_name: $final_params),+($name:ident $params:tt)) => (println!("Hello There!{:?}", $params))
+    ($name:ident $params:tt) => (recur ($name($params)))
 }
 
 macro_rules! recur_fn {
-   ($x:item) => ($x)
+   //($x:item) => ($x);
+   (fn $fpointer:ident $fparams:tt $x:tt $ftr:ty $fbody:block) =>
+        (fn $fpointer $fparams $x $ftr  {
+               $fbody
+        });
 }
+
+
 
 // need to change unsized function (dynamically sized function) like &[T] -- use destructuring???
 fn recur <T: 'static + Debug> (_params : T, _func : fn(T) -> T) -> T where T: Copy + PartialEq + ToString {
@@ -52,7 +46,7 @@ fn add_together (_num1 : u32, _num2 : u32) -> u32 {
 fn main() {
    //trampoline!(0+0);
    //println!("{:?}", tail_recur!(add_two(0)));
-   println!("{:?}", add_two(2));
+   println!("{:?}", add_two(5));
    //tail_recur!(add_together(1,3));
    //println!("{}", recur (0, add_two));
 }

@@ -8,7 +8,11 @@ use std::fmt::Debug;
 
 macro_rules! tail_recur { //put a conditional within the macro
     //($name:ident $params:tt $body:tt) => (recur($params, $name()))
+<<<<<<< HEAD
     ($name:ident $params:tt) => (recur($params, $name));
+=======
+    ($name:ident $params:tt) => ($name($params))
+>>>>>>> parent of 8b3db89... Allowed recursion for 1 parameter function...
     //(until $($final_name: $final_params),+($name:ident $params:tt)) => (println!("Hello There!{:?}", $params))
 }
 

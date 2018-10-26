@@ -10,8 +10,8 @@ macro_rules! recur {
 #[allow(unused_macros)]
 macro_rules! recur_fn {
     //($($word:tt),*) => (if stringify!($word) == )
-    (destructure_args $(($pname:ident $colon:tt $type:ty)),*) => ($($pname),*);
-    (destructure_types $(($pname:ident $colon:tt $type:ty)),*) => ($($type),*);
+    (destructure_args $($pname:ident $colon:tt $type:ty),*) => ($($pname),*);
+    (destructure_types $($pname:ident $colon:tt $type:ty),*) => ($($type),*);
     ($fpointer:ident $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block) =>
         (fn $fpointer $fparams $arrow $rtrn_type {
             let _memoize = recur_fn!(destructure_args $fparams);
@@ -22,6 +22,7 @@ macro_rules! recur_fn {
                     // function body ()
                     $fbody
                     break 'fn_loop;
+                    _memoize
                 }
                 //if foo  == true else ...
             }

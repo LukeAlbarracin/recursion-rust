@@ -1,47 +1,60 @@
 
-#[allow(unused_imports)] 
 use std::fmt::Debug;
 
-#[allow(unused_macros)]
 macro_rules! recur {
     ($($expr:expr),*) => ({return ($($expr),*)})
 }
 
-#[allow(unused_macros)]
 macro_rules! recur_fn {
-    //($($word:tt),*) => (if stringify!($word) == )
-    (destructure_args $($pname:ident $colon:tt $type:ty),*) => ($($pname),*);
-    (destructure_types $($pname:ident $colon:tt $type:ty),*) => ($($type),*);
-    ($fpointer:ident $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block) =>
+    /*
+    ($fpointer:ident $($fname:tt: $ftype:path),*, $arrow:tt $rtrn_type:tt $fbody:block) =>
+        (fn $fpointer $($fname : $ftype),* -> $rtrn_type {
+            let _memoize = recur_fn!($($fname),*,);
+            'fn_loop : loop {
+                fn rloop $fparams -> ($($ftype),*,) {
+                    $fbody
+                    break 'fn_loop;
+                    _memoize 
+                }
+            }
+        }); */
+    ($fpointer:ident $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block) => 
         (fn $fpointer $fparams $arrow $rtrn_type {
             let _memoize = recur_fn!(destructure_args $fparams);
             'fn_loop : loop {
-                fn rloop $fparams $arrow recur_fn!(destructure_types $fparams) {
-                    // destructure into a let statement
-                    // perform a condition check and get the function body of if/else statements (the control flow)
-                    // function body ()
-                    $fbody
-                    break 'fn_loop;
+                // can rloop have 0 arguments (impure function)???
+                fn rloop () $arrow recur_fn!(destructure_types $fparams) {
+                    //multiple closures that take fbody (e.g. |x| = x + 1) POSSIBLY NOT MANDATORY???
+                    let arbitrary_val = |x|
+                    $fbody; //should return a tuple of the updated arguments to be looped over...
+                    
                     _memoize
                 }
-                //if foo  == true else ...
+                break 'fn_loop;
+                _memoize = rloop(); 
             }
+            fn get_final_val $fparams $arrow $rtrn_type {
+                _memoize
+            }
+            //get_final_val(_memoize)
         });
+    //(fn $fpointer $fparams $arrow $rtrn_type {$fbody});
+    (destructure_args ($($pname:ident $colon:tt $type:ty),*)) => (($($pname),*));
+    (destructure_types ($($pname:ident $colon:tt $type:ty),*)) => (($($type),*))
    //($(fn $fpointer $gens:ty $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block)) => $();
 }
 
-/* recur_fn!{
-    add_two (_num : u32) -> u32 {
-        _num + 2
-    }
-}*/
-
-#[allow(dead_code)] 
-fn add_together (_num1 : u32, _num2 : u32) -> u32 {
+ recur_fn!{
+    add_together (_num1 : u32, _num2 : u32) -> u32 {
     _num1 + _num2
+    }   
+}
+
+fn add_two (_num : u32) -> u32 {
+       _num + 2
 }
 
 fn main() {
    println!("Tail recursive macro almost done!!!");
-   //println!("{:?}", add_two(5));
+   println!("{:?}", add_together(1, 4));
 }

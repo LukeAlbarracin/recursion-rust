@@ -1,42 +1,30 @@
-
+#[allow(unused_imports)]
 use std::fmt::Debug;
+use std::ops::BitOr;
 
 macro_rules! recur {
     ($($expr:expr),*) => ({return ($($expr),*)})
 }
 
 macro_rules! recur_fn {
-    /*
-    ($fpointer:ident $($fname:tt: $ftype:path),*, $arrow:tt $rtrn_type:tt $fbody:block) =>
-        (fn $fpointer $($fname : $ftype),* -> $rtrn_type {
-            let _memoize = recur_fn!($($fname),*,);
-            'fn_loop : loop {
-                fn rloop $fparams -> ($($ftype),*,) {
-                    $fbody
-                    break 'fn_loop;
-                    _memoize 
-                }
-            }
-        }); */
     ($fpointer:ident $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block) => 
         (fn $fpointer $fparams $arrow $rtrn_type {
             let _memoize = recur_fn!(destructure_args $fparams);
             'fn_loop : loop {
                 // can rloop have 0 arguments (impure function)???
-                fn rloop () $arrow recur_fn!(destructure_types $fparams) {
+                fn rloop $fparams $arrow recur_fn!(destructure_types $fparams) {
                     //multiple closures that take fbody (e.g. |x| = x + 1) POSSIBLY NOT MANDATORY???
-                    let arbitrary_val = |x|
-                    $fbody; //should return a tuple of the updated arguments to be looped over...
-                    
-                    _memoize
+                      let foo = Box::new(|x| $fbody); //should return a tuple of the updated arguments to be looped over...
+                      let baz = foo(1);
+                      (0,0)
                 }
                 break 'fn_loop;
-                _memoize = rloop(); 
+                _memoize = rloop(0, 1);
             }
             fn get_final_val $fparams $arrow $rtrn_type {
-                _memoize
+                $fbody
             }
-            //get_final_val(_memoize)
+            get_final_val (0, 2)
         });
     //(fn $fpointer $fparams $arrow $rtrn_type {$fbody});
     (destructure_args ($($pname:ident $colon:tt $type:ty),*)) => (($($pname),*));

@@ -18,14 +18,14 @@ macro_rules! recur_fn {
             let mut done = false;
             let mut outer_closure = move || while !done { // should be changed to a while loop...
                 done = true;
-                let recur = move |x| { _memoize = x; done = false;0};
+                let recur = move |x|  {_memoize = x; done = false; 2.5};
                 let inner_closure = Box::new(move |y| $fbody);
                 inner_closure(_memoize);
             };
             outer_closure();
-            fn recur ($($pname : $type),*) -> $rtrn_type {$fbody}
-            fn get_final_val ($($pname : $type),*) -> $rtrn_type $fbody
-            get_final_val (3, 3)
+            fn recur ($($pname : $type),*) -> $rtrn_type $fbody
+            let get_final_val = move |x| $fbody;
+            get_final_val ((_memoize))
         })
    //($(fn $fpointer $gens:ty $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block)) => $();
 }
@@ -48,5 +48,5 @@ fn add_two (_num : u32) -> u32 {
 
 fn main() {
    println!("Tail recursive macro almost done!!!");
-   println!("{:?}", add_together(3, 3));
+   println!("{:?}", add_together(0, 0));
 }

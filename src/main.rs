@@ -7,20 +7,24 @@ macro_rules! recur_fn {
             fn recur ($($pname : $type),*) -> $rtrn_type $fbody
             let tail_val = move |_tailp| $fbody;
             tail_val (_memoize)
-        })
-}
+        })}
 
  recur_fn!{
-    add_together (_num1 : u32, _num2 : u32) -> u32 {
-       let sum = _num1 + _num2;
-       if sum < 5 {
-           println!("{}", sum);
-           recur(recur(_num1 + 1, _num2 + 1), recur(_num1 + 1, _num2 + 1))
+   fibo_recursive (_num : u32) -> u32 {
+       if _num == 0 || _num == 1 {
+           _num
        } else {
-            sum
+          (recur(_num - 1) + recur(_num - 2))
        }
-    }   
+   }   
 }
+
+/* (defn fibo-recursive [n]
+         (if (or (= n 0) (= n 1))
+           n
+           (+ (fibo-recursive (- n 1)) (fibo-recursive (- n 2))))) */
+
+
 
 #[allow(dead_code)]
 fn add_two (_num : u32) -> u32 {
@@ -29,5 +33,5 @@ fn add_two (_num : u32) -> u32 {
 
 fn main() {
    println!("Tail recursive macro is complete!!!");
-   println!("{:?}", add_together(0, 0));
+   println!("{:?}", fibo_recursive(8));
 }

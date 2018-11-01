@@ -9,7 +9,7 @@ Look at the below code :
  
 Now by wrapping my code within the macro :
   
-  recur_fn! { // tail recursion simply by using function name
+  recur_fn! { 
     fn fibonacci_recur (_num : u32) -> u32 {
         if _num == 0 || _num == 1 {
            _num

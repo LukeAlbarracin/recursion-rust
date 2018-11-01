@@ -35,11 +35,9 @@ recur_fn! {
     }
 }
 
-
 fn main() {
    println!("Hello, Tail Recursive Macro!");
    assert_eq!(8, fibonacci_recur(6)); // Fibonacci sequence : 1,1,2,3,5,8,13,21...
    assert_eq!(4, recursive_iteration(0));
-   print_something(); 
-   
+   print_something();    
 }

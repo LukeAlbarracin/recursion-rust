@@ -1,6 +1,6 @@
 # recursion-rust
 
-Simply put ... a tiny macro can be used for a tail recursive call but I added the recur keyword that is specific to the macro within my project...
+Extremely concise macro that utilizes the hygienic macros of Rust to allow tail calls
 
 Look at the below code :
 

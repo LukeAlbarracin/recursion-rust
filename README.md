@@ -20,5 +20,5 @@ Now by wrapping my code within the macro :
   }
 
 Instead of getting a stack overflow error or an error that forbids a tail call, we are allowed to call the function
-recursively. This is because of the hygienic macro structure of rust. In order to avoid confusion amongst identifiers it often assigns a new identifier to the function pointer, resulting in the macro wrapping itself like foobar(foobar(foobar())). Yes, this is not pure tail call optimization but it is the closest way to replicate a tail call without a stack overflow error.
+recursively. This is because of the hygienic macro structure of rust. In order to avoid confusion amongst identifiers it often assigns divides the identifier based on it syntactical context to the function pointer, resulting in the macro wrapping itself like foobar(foobar(foobar())). Yes, this is not pure tail call optimization but it is the closest way to replicate a tail call without a stack overflow error. (See hygienic macros at : https://doc.rust-lang.org/book/first-edition/macros.html) 
 

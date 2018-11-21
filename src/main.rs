@@ -1,32 +1,47 @@
 macro_rules! recur_fn {
-    ($fpointer:ident ($($pname:ident $colon:tt $type:ty),*) $arrow:tt $rtrn_type:ty $fbody:block) => 
+    ($fpointer:ident ($($pname:ident $colon:tt $type:ty),*) -> $rtrn_type:ty $fbody:block) =>
         (fn $fpointer ($($pname : $type),*) -> $rtrn_type {
-            let mut _memoize = ($($pname),*);
-            let mut done = false;
-            let mut outer_closure = move || while !done {
-                done = true;
-                let recur = move |x|  {_memoize = x; done = false;};
-                let inner_closure = Box::new(move |y| $fbody);
-                inner_closure(_memoize);
+                let mut done = false;
+                let mut _memoize = ($($pname),*);
+                let mut _outer = move || loop {
+                    println!("Hello there!");
+                    done = true;
+                    println!("Can you hear me?");
+                        let mut _inner = move |_genp| {
+                            println!("Inside this!");
+                            let mut recur = move |x:u32,y:u32| {println!("Help is on its way!!!"); done = false; _memoize = (x,y); (x,y)};
+                            let mut _super = move || {println!("inside super..."); $fbody};
+                            _super();
+                        };
+                        println!("{:?}",_inner(_memoize));
+                    if done == true {
+                        println!("It's quite dark outside...");
+                        break;
+                    }
+                };
+                _outer();
+            let recur = move |x,y| {println!("Help is on its way!!!"); done = false; _memoize = (x,y); (x,y)};
+            //fn recur ($($pname:$type),*) -> $rtrn_type {101}
+            let tail_func = |_params| { 
+                $fbody
             };
-            fn recur ($($pname : $type),*) -> $rtrn_type $fbody
-            let tail_val = move |_tailp| $fbody;
-            tail_val (_memoize)
+            tail_func (_memoize)
         })
-   //($(fn $fpointer $gens:ty $fparams:tt $arrow:tt $rtrn_type:ty $fbody:block)) => $();
 }
 
- recur_fn!{
+recur_fn!{
     add_together (_num1 : u32, _num2 : u32) -> u32 {
        let sum = _num1 + _num2;
        if sum < 10 {
-           println!("Okay");
-           recur(_num1 + 1, _num2 + 1)
+           println!("This test ran okay!!!");
+           recur(_num1+1, _num2+1)
        } else {
             sum
        }
     }   
 }
+
+
 
 fn main() {
    println!("Tail recursive macro almost done!!!");

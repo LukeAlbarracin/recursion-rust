@@ -1,3 +1,3 @@
 # recursion-rust
 
-Still working on stuff...
+A deeper exploration into macros, ASTs, and token parsing in Rust
